@@ -1,4 +1,4 @@
-var finances = [
+const finances = [
 ['Jan-2010', 867884],
 ['Feb-2010', 984655],
 ['Mar-2010', 322013],
@@ -86,3 +86,40 @@ var finances = [
 ['Jan-2017', 138230],
 ['Feb-2017', 671099]
 ];
+// determine the number of months in the dataset
+let numberOfMonths = finances.length;
+
+// determine the sum of the total profit/loss
+// determine the greatest profit and associated month
+// determine the greatest loss and associated month in the dataset
+let totalProfit = 0;
+let maxProfit = 0;
+let maxProfitMonth = undefined;
+let maxLoss = 0;
+let maxLossMonth = undefined;
+
+for (let i = 0; i < finances.length; i++) {
+    const monthProfit = finances[i][1];
+    const dataMonth = finances[i][0];
+    totalProfit = totalProfit + monthProfit;    // sum the ongoing total
+    if (maxProfit < monthProfit) {  // test current maximum
+        maxProfit = monthProfit;    // set maximum to new high value 
+        maxProfitMonth = dataMonth; // set associated month of current maximum
+    }
+    if (maxLoss > monthProfit) {    // logically this could be else if to save a comparsion
+        maxLoss = monthProfit;      // set minimum to new larger loss
+        maxLossMonth = dataMonth;   // set associated month of current least profit
+    }
+}
+
+// determine the rounded average profit/loss per month
+let averageProfit = Math.round(totalProfit/numberOfMonths);
+
+// output financial statemnt to browser
+console.log("Total Months: " + numberOfMonths);
+console.log("Total: $" + totalProfit);
+console.log("Average Change $:" + averageProfit);
+console.log("Greatest Increase in Profits:");
+console.log(maxProfitMonth + " ($" + maxProfit + ")");
+console.log("Greatest Loss in Profits:");
+console.log(maxLossMonth + " ($" + maxLoss + ")");
