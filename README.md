@@ -5,8 +5,8 @@ given a dataset comprising an array of monthly profits by month, the task is to 
 - total profit,
 - average monthly profit,
 - size (months) of the dataset,
-- greatest monthly profit,
-- greatest monthly loss.
+- greatest monthly change in profit,
+- greatest monthly change in loss.
 
 ## Tecnologies
 javascript code, html rendering. 
