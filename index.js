@@ -86,54 +86,60 @@ const finances = [
 ['Jan-2017', 138230],
 ['Feb-2017', 671099]
 ];
-// determine the number of months in the dataset
-let numberOfMonths = finances.length;
-
-// determine the sum of the total profit/loss
-// determine the greatest profit and associated month
-// determine the greatest loss and associated month in the dataset
-let totalProfit = 0;
-let maxProfit = 0;
-let maxProfitMonth = undefined;
-let maxLoss = 0;                    // by inspection the greatest loss in the dataset is a -ve figure..
-                                    // the algoritm below relies on this - had a least profit been required,..
-                                    // i.e. a +ve figure, an alternative algorithm would be needed.
-let maxLossMonth = undefined;
+// names to illustrate finances sub-array indexes.
 const money = 1
 const month = 0
 
-for (dataPoint of finances) {       // iterator dataPoint traverses finances data
-    const monthProfit = dataPoint[money];
-    const dataMonth = dataPoint[month];
-    totalProfit += monthProfit;     // sum the ongoing total
-    if (maxProfit < monthProfit) {  // test current maximum
-        maxProfit = monthProfit;    // set maximum to new high value 
-        maxProfitMonth = dataMonth; // set associated month of current maximum
+// determine the number of months in the dataset.
+let numberOfMonths = finances.length;
+
+// define profit sum varaible.
+let totalProfit = 0;
+
+// define variables to hold the max/min monthly profit changes..
+// and associated months.
+let greatestProfitIncrease = 0;
+let greatestProfitIncreaseMonth = undefined;
+let greatestProfitDecrease = 0;                    
+let greatestProfitDecreaseMonth = undefined;
+
+// three variables are required to determine the change in monthly profit.
+// each iteration will calculate; monthDifference = thisMonthProfit - lastMonthProfit.
+// the edge-case is the first iteration since there is no monthly change.
+// to set the previousMonth to zero is to risk failure because should the first month income..
+// be greater (or less) than any difference, this would be the figure assigned to the maximum (or minimum).
+// so initially set lastMonthProfit to firstMonthProfit, which will give a difference of..
+// zero, which cannot be wrong.
+let lastMonthProfit = finances[0][money];
+let monthDifference = undefined;
+
+// iterate through finances data
+for (dataPoint of finances) {       // iterator dataPoint
+    const thisMonthProfit = dataPoint[money];
+    const thisMonth = dataPoint[month];
+
+    totalProfit += thisMonthProfit;     // sum the ongoing total
+
+    monthDifference = thisMonthProfit - lastMonthProfit;    // difference from last month
+
+    if (monthDifference >= greatestProfitIncrease) {        // In the event of two or more monthwise differences being both equal and greatest..
+        greatestProfitIncrease = monthDifference;           // then the most recent example month is recorded.
+        greatestProfitIncreaseMonth = thisMonth;
+    } else if (monthDifference <= greatestProfitDecrease) { // likewise for equal greatest loss - last recorded.
+        greatestProfitDecrease = monthDifference;
+        greatestProfitDecreaseMonth = thisMonth;
     }
-    if (maxLoss > monthProfit) {    // logically this could be else if to save a comparsion
-        maxLoss = monthProfit;      // set minimum to new larger loss
-        maxLossMonth = dataMonth;   // set associated month of current largest loss
-    }
+
+    lastMonthProfit = thisMonthProfit;  // last action of each iteration
 }
 
 // determine the rounded average profit/loss per month
-let averageProfit = Math.round(totalProfit*100/numberOfMonths)/100;
-
-// output financial statemnt to browser
-console.log("Total Months: " + numberOfMonths);
-console.log("Total: $" + totalProfit);
-console.log("Average Change $:" + averageProfit);
-console.log("Greatest Increase in Profits:");
-console.log(maxProfitMonth + " ($" + maxProfit + ")");
-console.log("Greatest Loss in Profits:");
-console.log(maxLossMonth + " ($" + maxLoss + ")");
+const twoDecimalPlaces = 100;     // multiply and divide by 100 for two d.p.
+let averageProfit = Math.round(totalProfit*(twoDecimalPlaces)/numberOfMonths)/(twoDecimalPlaces);
 
 // output financial statement to web page
 document.getElementById("months").innerHTML = "Total Months: " + numberOfMonths + "\n";
 document.getElementById("total").innerHTML = "Total: $" + totalProfit + "\n";
 document.getElementById("average").innerHTML = "Average Change $:" + averageProfit;
-document.getElementById("max").innerHTML = "Greatest Increase in Profits:";
-document.getElementById("max-month").innerHTML = maxProfitMonth + " ($" + maxProfit + ")";
-document.getElementById("min").innerHTML = "Greatest Loss in Profits:";
-document.getElementById("min-month").innerHTML = maxLossMonth + " ($" + maxLoss + ")";
-
+document.getElementById("max").innerHTML = "Greatest Increase in Profits: " + greatestProfitIncreaseMonth + " ($" + greatestProfitIncrease + ")";
+document.getElementById("min").innerHTML = "Greatest Loss in Profits: " + greatestProfitDecreaseMonth + " ($" + greatestProfitDecrease + ")";
