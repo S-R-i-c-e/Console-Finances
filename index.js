@@ -117,7 +117,7 @@ for (dataPoint of finances) {       // iterator dataPoint traverses finances dat
 }
 
 // determine the rounded average profit/loss per month
-let averageProfit = Math.round(totalProfit/numberOfMonths);
+let averageProfit = Math.round(totalProfit*100/numberOfMonths)/100;
 
 // output financial statemnt to browser
 console.log("Total Months: " + numberOfMonths);
