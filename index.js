@@ -95,20 +95,24 @@ let numberOfMonths = finances.length;
 let totalProfit = 0;
 let maxProfit = 0;
 let maxProfitMonth = undefined;
-let maxLoss = 0;
+let maxLoss = 0;                    // by inspection the greatest loss in the dataset is a -ve figure..
+                                    // the algoritm below relies on this - had a least profit been required,..
+                                    // i.e. a +ve figure, an alternative algorithm would be needed.
 let maxLossMonth = undefined;
+const money = 1
+const month = 0
 
-for (let i = 0; i < finances.length; i++) {
-    const monthProfit = finances[i][1];
-    const dataMonth = finances[i][0];
-    totalProfit = totalProfit + monthProfit;    // sum the ongoing total
+for (dataPoint of finances) {
+    const monthProfit = dataPoint[money];
+    const dataMonth = dataPoint[month];
+    totalProfit += monthProfit;    // sum the ongoing total
     if (maxProfit < monthProfit) {  // test current maximum
         maxProfit = monthProfit;    // set maximum to new high value 
         maxProfitMonth = dataMonth; // set associated month of current maximum
     }
     if (maxLoss > monthProfit) {    // logically this could be else if to save a comparsion
         maxLoss = monthProfit;      // set minimum to new larger loss
-        maxLossMonth = dataMonth;   // set associated month of current least profit
+        maxLossMonth = dataMonth;   // set associated month of current largest loss
     }
 }
 
