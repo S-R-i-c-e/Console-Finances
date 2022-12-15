@@ -102,10 +102,10 @@ let maxLossMonth = undefined;
 const money = 1
 const month = 0
 
-for (dataPoint of finances) {
+for (dataPoint of finances) {       // iterator dataPoint traverses finances data
     const monthProfit = dataPoint[money];
     const dataMonth = dataPoint[month];
-    totalProfit += monthProfit;    // sum the ongoing total
+    totalProfit += monthProfit;     // sum the ongoing total
     if (maxProfit < monthProfit) {  // test current maximum
         maxProfit = monthProfit;    // set maximum to new high value 
         maxProfitMonth = dataMonth; // set associated month of current maximum
@@ -127,3 +127,13 @@ console.log("Greatest Increase in Profits:");
 console.log(maxProfitMonth + " ($" + maxProfit + ")");
 console.log("Greatest Loss in Profits:");
 console.log(maxLossMonth + " ($" + maxLoss + ")");
+
+// output financial statement to web page
+document.getElementById("months").innerHTML = "Total Months: " + numberOfMonths + "\n";
+document.getElementById("total").innerHTML = "Total: $" + totalProfit + "\n";
+document.getElementById("average").innerHTML = "Average Change $:" + averageProfit;
+document.getElementById("max").innerHTML = "Greatest Increase in Profits:";
+document.getElementById("max-month").innerHTML = maxProfitMonth + " ($" + maxProfit + ")";
+document.getElementById("min").innerHTML = "Greatest Loss in Profits:";
+document.getElementById("min-month").innerHTML = maxLossMonth + " ($" + maxLoss + ")";
+
