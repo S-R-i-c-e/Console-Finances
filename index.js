@@ -86,7 +86,7 @@ const finances = [
 ['Jan-2017', 138230],
 ['Feb-2017', 671099]
 ];
-// names to illustrate finances sub-array indexes.
+// names to describe finances sub-array indexes.
 const money = 1
 const month = 0
 
@@ -114,11 +114,11 @@ let lastMonthProfit = finances[0][money];
 let monthDifference = undefined;
 
 // the cumulative monthly change variable - as the explanation above,..
-// the setting the initial lastMonthValue will ensure the result is correct
+// setting the initial lastMonthValue will ensure the result is correct.
 let cumulativeChange = 0;
 
 // iterate through finances data
-for (dataPoint of finances) {       // iterator dataPoint
+for (dataPoint of finances) {
     const thisMonthProfit = dataPoint[money];
     const thisMonth = dataPoint[month];
 
@@ -159,7 +159,7 @@ document.getElementById("financial-statement").innerHTML = ( prettyFinancialStat
                                                             +prettyFinancialStatement[3]+'\n'
                                                             +prettyFinancialStatement[4]+'\n');
 
-// The remainder of the code is a calculation double check and an out prettifier
+// The remainder of the code is a calculation double check and an output prettifier
 
 // double check - calculation of average cvumaulative change
 // by another way as original does not match
@@ -173,8 +173,6 @@ total=diff.reduce((x,y) => x+y,0);
 average=total/85;
 console.log(average);
 
-// function to align the text output about the colon and so prettify
-// function to multiply a string
 // function to multiply a string
 function strMultiply(str, multiple) {
     let outStr = '';                                        // output set empty
@@ -186,8 +184,7 @@ function strMultiply(str, multiple) {
     return outStr;
 }
 
-test = "WhoCriedWolf?";
-// recursion
+// recursive string multiplication
 function recurStringMultiply(str, multiple) {
     if (multiple === 1) {
         return str;
@@ -196,8 +193,6 @@ function recurStringMultiply(str, multiple) {
         return str + recurStringMultiply(str, multiple-1);
     }
 }
-tested=recurStringMultiply(test, 4);
-console.log(tested);
 
 // a function to change a string into an array of characters
 function stringToArray(str) {           
@@ -210,7 +205,6 @@ function stringToArray(str) {
     return arr;
 }
 
-
 // Given an array of strings each with a colon embedded
 // return an array padded with whitespace to the lhs s.t.
 // the strings are justified about a central column of colons, e.g.,
@@ -218,28 +212,22 @@ function stringToArray(str) {
 // returns
 // ['Mary had : a little lamb,', '     its : fleece was white as snow,']
 
-// Given an array of strings each with a colon embedded
-// return an array padded with whitespace to the lhs s.t.
-// the strings are justified about a central line of colons, e.g.,
-// ['Mary had : a little lamb,', 'its : fleece was white as snow,']
-// returns
-// ['Mary had : a little lamb,', '     its : fleece was white as snow,']
+// considers the strings as a l.h.s and r.h.s about a colon (the r.h.s. has no relevance to the algorithm)
+// calculates the number of characters from left to the colon for each string
+// calculates the longest l.h.s., 
+// calculates the number of spaces needed to make up the the l.h.s.'s to make them all equal
+// inserts those spaces to give the desired result
+
 function prettyColonAlign(strArray) {
     let charArrays = strArray.map(str => stringToArray(str));                               // create equivalent character string arrays
-    lengthsMap = charArrays.map(chrArr => chrArr.findIndex(char => char === ':'));          // map lenth to initial colon of each string
-    longestLHS = lengthsMap.reduce((x,y) => (x>y) ? x : y);                                 // determine the lonest lhs length to colon    
-    whitespaceLengthsMap = lengthsMap.map(length => longestLHS - length);                   // calculate the number of spaces required to pad the shorter lhs's          
-    whiteSpaceMap = whitespaceLengthsMap.map(x => strMultiply(' ',x));                      // map the lengths to equivalent number of spaces           
-    let paddedVerseArray = [];                                                              // create an array to hold whitespace padded strings
+    let lengthsMap = charArrays.map(chrArr => chrArr.findIndex(char => char === ':'));          // map lenth to initial colon of each string
+    let longestLHS = lengthsMap.reduce((x,y) => (x>y) ? x : y);                                 // determine the longest lhs length to colon    
+    let whitespaceLengthsMap = lengthsMap.map(length => longestLHS - length);                   // calculate the number of spaces required to pad the shorter lhs's          
+    let whiteSpaceMap = whitespaceLengthsMap.map(x => strMultiply(' ',x));                      // map the lengths to equivalent number of spaces           
+    let paddedStringArray = [];                                                              // create an array to hold whitespace padded strings
     for (i=0;i<whiteSpaceMap.length;i++) {
-        paddedVerseArray[i] = whiteSpaceMap[i] + strArray[i];                               // concatenate the whitespace and original strings
+        paddedStringArray[i] = whiteSpaceMap[i] + strArray[i];                               // concatenate the whitespace and original strings
     }
-    return paddedVerseArray;
+    return paddedStringArray;
 }
-
-test2 = ["We are close, we : are friends,", "And : our love never ends,", "But in the cold : morning light I see,", "That you won't be back for : me"];
-testOut = prettyColonAlign(test2);
-console.log(testOut.toString());
-
-document.getElementById("text-output").innerHTML = (testOut[0]+'\n'+testOut[1]+'\n'+testOut[2]+'\n'+testOut[3]+'\n');
-
+//END
