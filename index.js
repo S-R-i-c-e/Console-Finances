@@ -126,7 +126,7 @@ for (dataPoint of finances) {       // iterator dataPoint
 
     monthDifference = thisMonthProfit - lastMonthProfit;    // difference from last month
 
-    cumulativeChange = monthDifference; // sum of changes
+    cumulativeChange += monthDifference; // sum of changes
 
     if (monthDifference >= greatestProfitIncrease) {        // In the event of two or more monthwise differences being both equal and greatest..
         greatestProfitIncrease = monthDifference;           // then the most recent example month is recorded.
@@ -149,3 +149,17 @@ document.getElementById("total").innerHTML = "Total: $" + totalProfit + "\n";
 document.getElementById("average").innerHTML = "Average Change $:" + averageCumulativeChange;
 document.getElementById("max").innerHTML = "Greatest Increase in Profits: " + greatestProfitIncreaseMonth + " ($" + greatestProfitIncrease + ")";
 document.getElementById("min").innerHTML = "Greatest Loss in Profits: " + greatestProfitDecreaseMonth + " ($" + greatestProfitDecrease + ")";
+
+// double check - calculation of average cvumaulative change
+// by another way as original does not match
+// Finances contains 86 profits, giving 85 changes
+onlyMoney = finances.map(x => x[1]);
+diff=[];
+for(i=1;i<=86;i++) { diff.push(onlyMoney[i]-onlyMoney[i-1]);}
+// superfluous NaN value at the end results
+diff.pop();
+total=diff.reduce((x,y) => x+y,0);
+average=total/85;
+console.log(average);
+
+// function to align the text output about the colon and so prettify
