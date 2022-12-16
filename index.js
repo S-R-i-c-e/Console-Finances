@@ -140,15 +140,26 @@ for (dataPoint of finances) {       // iterator dataPoint
 }
 
 // determine the rounded average profit/loss per month
-const twoDecimalPlaces = 100;     // multiply and divide by 100 for two d.p.
-let averageCumulativeChange = Math.round(cumulativeChange*(twoDecimalPlaces)/(numberOfMonths-1))/(twoDecimalPlaces);
+const twoDecimalPlaces = 100;                   // multiply and divide by 100 for two d.p.
+const numberOfDifferences = numberOfMonths-1;   // 86 months less one gives 85 differences
+let averageCumulativeChange = Math.round(cumulativeChange*(twoDecimalPlaces)/(numberOfDifferences))/(twoDecimalPlaces);
 
-// output financial statement to web page
-document.getElementById("months").innerHTML = "Total Months: " + numberOfMonths + "\n";
-document.getElementById("total").innerHTML = "Total: $" + totalProfit + "\n";
-document.getElementById("average").innerHTML = "Average Change $:" + averageCumulativeChange;
-document.getElementById("max").innerHTML = "Greatest Increase in Profits: " + greatestProfitIncreaseMonth + " ($" + greatestProfitIncrease + ")";
-document.getElementById("min").innerHTML = "Greatest Loss in Profits: " + greatestProfitDecreaseMonth + " ($" + greatestProfitDecrease + ")";
+// assemble financials text output
+financialStatement = [];
+financialStatement.push("Total Months: " + numberOfMonths + "\n");
+financialStatement.push("Total: $" + totalProfit + "\n");
+financialStatement.push("Average Change $:" + averageCumulativeChange + "\n");
+financialStatement.push("Greatest Increase in Profits: " + greatestProfitIncreaseMonth + " ($" + greatestProfitIncrease + ")\n");
+financialStatement.push("Greatest Loss in Profits: " + greatestProfitDecreaseMonth + " ($" + greatestProfitDecrease + ")\n");
+
+prettyFinancialStatement = prettyColonAlign(financialStatement);    //align output by whitespace padding (monospace font only)
+document.getElementById("financial-statement").innerHTML = ( prettyFinancialStatement[0]+'\n'
+                                                            +prettyFinancialStatement[1]+'\n'
+                                                            +prettyFinancialStatement[2]+'\n'
+                                                            +prettyFinancialStatement[3]+'\n'
+                                                            +prettyFinancialStatement[4]+'\n');
+
+// The remainder of the code is a calculation double check and an out prettifier
 
 // double check - calculation of average cvumaulative change
 // by another way as original does not match
@@ -163,3 +174,72 @@ average=total/85;
 console.log(average);
 
 // function to align the text output about the colon and so prettify
+// function to multiply a string
+// function to multiply a string
+function strMultiply(str, multiple) {
+    let outStr = '';                                        // output set empty
+    if (typeof(multiple) === 'number') {                    // rudimentary checking
+        for (let index = 0; index < multiple; index++) {    // works for any integer >=0
+            outStr += str;                                  // concatenate
+        }
+    }
+    return outStr;
+}
+
+test = "WhoCriedWolf?";
+// recursion
+function recurStringMultiply(str, multiple) {
+    if (multiple === 1) {
+        return str;
+    }
+    else {
+        return str + recurStringMultiply(str, multiple-1);
+    }
+}
+tested=recurStringMultiply(test, 4);
+console.log(tested);
+
+// a function to change a string into an array of characters
+function stringToArray(str) {           
+    arr = [];
+    if (typeof(str)==='string') {
+        for(i=0;i<str.length;i++) {
+            arr[i]=str[i];
+        }
+    }
+    return arr;
+}
+
+
+// Given an array of strings each with a colon embedded
+// return an array padded with whitespace to the lhs s.t.
+// the strings are justified about a central column of colons, e.g.,
+// ['Mary had : a little lamb,', 'its : fleece was white as snow,']
+// returns
+// ['Mary had : a little lamb,', '     its : fleece was white as snow,']
+
+// Given an array of strings each with a colon embedded
+// return an array padded with whitespace to the lhs s.t.
+// the strings are justified about a central line of colons, e.g.,
+// ['Mary had : a little lamb,', 'its : fleece was white as snow,']
+// returns
+// ['Mary had : a little lamb,', '     its : fleece was white as snow,']
+function prettyColonAlign(strArray) {
+    let charArrays = strArray.map(str => stringToArray(str));                               // create equivalent character string arrays
+    lengthsMap = charArrays.map(chrArr => chrArr.findIndex(char => char === ':'));          // map lenth to initial colon of each string
+    longestLHS = lengthsMap.reduce((x,y) => (x>y) ? x : y);                                 // determine the lonest lhs length to colon    
+    whitespaceLengthsMap = lengthsMap.map(length => longestLHS - length);                   // calculate the number of spaces required to pad the shorter lhs's          
+    whiteSpaceMap = whitespaceLengthsMap.map(x => strMultiply(' ',x));                      // map the lengths to equivalent number of spaces           
+    let paddedVerseArray = [];                                                              // create an array to hold whitespace padded strings
+    for (i=0;i<whiteSpaceMap.length;i++) {
+        paddedVerseArray[i] = whiteSpaceMap[i] + strArray[i];                               // concatenate the whitespace and original strings
+    }
+    return paddedVerseArray;
+}
+
+test2 = ["We are close, we : are friends,", "And : our love never ends,", "But in the cold : morning light I see,", "That you won't be back for : me"];
+testOut = prettyColonAlign(test2);
+console.log(testOut.toString());
+
+document.getElementById("text-output").innerHTML = (testOut[0]+'\n'+testOut[1]+'\n'+testOut[2]+'\n'+testOut[3]+'\n');
+

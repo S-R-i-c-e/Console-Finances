@@ -2,3 +2,11 @@ body {
     font-family: 'Roboto Slab', 'Times New Roman', Times, serif;
     background-color: bisque;
 }
+
+pre {
+    font-size: 1.2rem;
+}
+
+h1 {
+    text-align: center;
+}
