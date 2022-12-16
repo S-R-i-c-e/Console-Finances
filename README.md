@@ -8,8 +8,11 @@ given a dataset comprising an array of monthly profits by month, the task is to 
 - greatest monthly change in profit,
 - greatest monthly change in loss.
 
-## Tecnologies
-javascript code, html rendering. 
+## Deployment
+
+### [repo](https://github.com/S-R-i-c-e/Console-Finances)
+### [webpage](https://s-r-i-c-e.github.io/Console-Finances/)
+javascript code, html rendering, CSS styliing. 
 
 ## Installation
 requires a web-browser - open index.html file.

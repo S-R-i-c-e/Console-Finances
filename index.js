@@ -113,6 +113,10 @@ let greatestProfitDecreaseMonth = undefined;
 let lastMonthProfit = finances[0][money];
 let monthDifference = undefined;
 
+// the cumulative monthly change variable - as the explanation above,..
+// the setting the initial lastMonthValue will ensure the result is correct
+let cumulativeChange = 0;
+
 // iterate through finances data
 for (dataPoint of finances) {       // iterator dataPoint
     const thisMonthProfit = dataPoint[money];
@@ -121,6 +125,8 @@ for (dataPoint of finances) {       // iterator dataPoint
     totalProfit += thisMonthProfit;     // sum the ongoing total
 
     monthDifference = thisMonthProfit - lastMonthProfit;    // difference from last month
+
+    cumulativeChange = monthDifference; // sum of changes
 
     if (monthDifference >= greatestProfitIncrease) {        // In the event of two or more monthwise differences being both equal and greatest..
         greatestProfitIncrease = monthDifference;           // then the most recent example month is recorded.
@@ -135,11 +141,11 @@ for (dataPoint of finances) {       // iterator dataPoint
 
 // determine the rounded average profit/loss per month
 const twoDecimalPlaces = 100;     // multiply and divide by 100 for two d.p.
-let averageProfit = Math.round(totalProfit*(twoDecimalPlaces)/numberOfMonths)/(twoDecimalPlaces);
+let averageCumulativeChange = Math.round(cumulativeChange*(twoDecimalPlaces)/(numberOfMonths-1))/(twoDecimalPlaces);
 
 // output financial statement to web page
 document.getElementById("months").innerHTML = "Total Months: " + numberOfMonths + "\n";
 document.getElementById("total").innerHTML = "Total: $" + totalProfit + "\n";
-document.getElementById("average").innerHTML = "Average Change $:" + averageProfit;
+document.getElementById("average").innerHTML = "Average Change $:" + averageCumulativeChange;
 document.getElementById("max").innerHTML = "Greatest Increase in Profits: " + greatestProfitIncreaseMonth + " ($" + greatestProfitIncrease + ")";
 document.getElementById("min").innerHTML = "Greatest Loss in Profits: " + greatestProfitDecreaseMonth + " ($" + greatestProfitDecrease + ")";
