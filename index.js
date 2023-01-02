@@ -152,26 +152,25 @@ financialStatement.push("Average Change $:" + averageCumulativeChange + "\n");
 financialStatement.push("Greatest Increase in Profits: " + greatestProfitIncreaseMonth + " ($" + greatestProfitIncrease + ")\n");
 financialStatement.push("Greatest Loss in Profits: " + greatestProfitDecreaseMonth + " ($" + greatestProfitDecrease + ")\n");
 
+// output the financial statement to the console
+for (line in financialStatement) {
+    console.log(financialStatement[line]);
+}
+
+// prettify the financial statement
 prettyFinancialStatement = prettyColonAlign(financialStatement);    //align output by whitespace padding (monospace font only)
+
+// output financial statement to webpage
 document.getElementById("financial-statement").innerHTML = ( prettyFinancialStatement[0]+'\n'
                                                             +prettyFinancialStatement[1]+'\n'
                                                             +prettyFinancialStatement[2]+'\n'
                                                             +prettyFinancialStatement[3]+'\n'
                                                             +prettyFinancialStatement[4]+'\n');
 
-// The remainder of the code is a calculation double check and an output prettifier
 
-// double check - calculation of average cvumaulative change
-// by another way as original does not match
-// Finances contains 86 profits, giving 85 changes
-onlyMoney = finances.map(x => x[1]);
-diff=[];
-for(i=1;i<=86;i++) { diff.push(onlyMoney[i]-onlyMoney[i-1]);}
-// superfluous NaN value at the end results
-diff.pop();
-total=diff.reduce((x,y) => x+y,0);
-average=total/85;
-console.log(average);
+
+
+// The remainder of the code is a calculation double check and an output prettifier
 
 // function to multiply a string
 function strMultiply(str, multiple) {
@@ -184,26 +183,6 @@ function strMultiply(str, multiple) {
     return outStr;
 }
 
-// recursive string multiplication
-function recurStringMultiply(str, multiple) {
-    if (multiple === 1) {
-        return str;
-    }
-    else {
-        return str + recurStringMultiply(str, multiple-1);
-    }
-}
-
-// a function to change a string into an array of characters
-function stringToArray(str) {           
-    arr = [];
-    if (typeof(str)==='string') {
-        for(i=0;i<str.length;i++) {
-            arr[i]=str[i];
-        }
-    }
-    return arr;
-}
 
 // Given an array of strings each with a colon embedded
 // return an array padded with whitespace to the lhs s.t.
@@ -219,7 +198,7 @@ function stringToArray(str) {
 // inserts those spaces to give the desired result
 
 function prettyColonAlign(strArray) {
-    let charArrays = strArray.map(str => stringToArray(str));                               // create equivalent character string arrays
+    let charArrays = strArray.map(str => str.split('')); //stringToArray(str));                               // create equivalent character string arrays
     let lengthsMap = charArrays.map(chrArr => chrArr.findIndex(char => char === ':'));          // map lenth to initial colon of each string
     let longestLHS = lengthsMap.reduce((x,y) => (x>y) ? x : y);                                 // determine the longest lhs length to colon    
     let whitespaceLengthsMap = lengthsMap.map(length => longestLHS - length);                   // calculate the number of spaces required to pad the shorter lhs's          
