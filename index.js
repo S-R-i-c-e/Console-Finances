@@ -139,10 +139,14 @@ for (dataPoint of finances) {
     lastMonthProfit = thisMonthProfit;  // last action of each iteration
 }
 
+// function rounds a number to the number of decimal places given by accuracy
+// accuracy should be a +ve integer
+function roundDP(number, accuracy) {
+    return Math.round(number*10**accuracy)/10**accuracy;
+}
 // determine the rounded average profit/loss per month
-const twoDecimalPlaces = 100;                   // multiply and divide by 100 for two d.p.
 const numberOfDifferences = numberOfMonths-1;   // 86 months less one gives 85 differences
-let averageCumulativeChange = Math.round(cumulativeChange*(twoDecimalPlaces)/(numberOfDifferences))/(twoDecimalPlaces);
+let averageCumulativeChange = roundDP((cumulativeChange/numberOfDifferences),2);  // rounded to 2dp
 
 // assemble financials text output
 financialStatement = [];
@@ -198,7 +202,7 @@ function strMultiply(str, multiple) {
 // inserts those spaces to give the desired result
 
 function prettyColonAlign(strArray) {
-    let charArrays = strArray.map(str => str.split('')); //stringToArray(str));                               // create equivalent character string arrays
+    let charArrays = strArray.map(str => str.split(''));                                      // create equivalent character string arrays
     let lengthsMap = charArrays.map(chrArr => chrArr.findIndex(char => char === ':'));          // map lenth to initial colon of each string
     let longestLHS = lengthsMap.reduce((x,y) => (x>y) ? x : y);                                 // determine the longest lhs length to colon    
     let whitespaceLengthsMap = lengthsMap.map(length => longestLHS - length);                   // calculate the number of spaces required to pad the shorter lhs's          
